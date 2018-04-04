@@ -4,6 +4,7 @@
 #endif /*HAVE_CONFIG_H*/
 #include <vips/intl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <vips/vips.h>
 
@@ -57,16 +58,16 @@ mag_generate( VipsRegion *or,
       VIPS_REGION_ADDR( ir, r->left, r->top + y ); 
     unsigned char * q = (unsigned char *)
       VIPS_REGION_ADDR( or, r->left, r->top + y ); 
-//takes the input, calculates its square root and assigns it to the output
+
   	for( x = 0; x < line_size; x++ ) {
-  		while ((p[x]>>1)>(c*c)) {
+  		while ((p[x])>(c*c)) {
     		c++;
     		if (c>255)
     		printf("error, limit exceeded");
    			}
-    
-    	q[x]= ((c*c)-(p[x]>>1)>(p[x]>>1)-((c-1)*(c-1)))? c:c-1;
-	c=0;	
+//assign the count closest to the real square root of the input to the output 
+    	q[x]= ((c*c)-(p[x])>(p[x])-((c-1)*(c-1)))? c<<8:(c-1)<<8;
+			c=0;	
 		}
   }
   return 0;
